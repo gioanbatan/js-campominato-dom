@@ -38,9 +38,9 @@
 
 // DATA 
 // Dimensione griglia
-let gridSize = 100;
+let gridSize = 0;
 // Numero di celle per lato della griglia
-let gridSide = 10;
+let gridRow = 0;
 // Numero bombe
 let bombsNumber = 16;
 // Array delle bombe
@@ -58,7 +58,7 @@ const difficulty = document.getElementById("difficulty");
 
 // OUTPUT ELEMENTS
 // Contenitore della griglia
-const grid = document.querySelector(".ms_main-container");
+const gridContainer = document.querySelector(".ms_main-container");
 // Box comunicazione (fondo scuro per comunicazioni)
 const communicationBox = document.querySelector(".ms_communication-box");
 console.log("comm-box", communicationBox)
@@ -69,49 +69,94 @@ const youLooseMessage = document.querySelector(".ms_loose");
 
 // INPUT
 // SE l'utente clicca play resetta e avvia il gioco 
-playBtn.addEventListener("click", function () {
+playBtn.addEventListener("click", restartGame);
+//     // Stato del gioco (true->Attivo false->Fermo)
+//     play = true;
+
+//     // console.log("gridSize", gridSize);
+//     // Pulizia del main container
+//     clearGrid(grid);
+
+//     // Scelta della difficoltà
+//     if (parseInt(difficulty.value) === 1) {
+//         console.log("diff", difficulty.value);
+//         gridSize = 100;
+//         gridRow = 10;
+//     } else if (parseInt(difficulty.value) === 2) {
+//         console.log("diff", difficulty.value);
+//         gridSize = 81;
+//         gridRow = 9;
+//     } else if (parseInt(difficulty.value) === 3) {
+//         console.log("diff", difficulty.value);
+//         gridSize = 49;
+//         gridRow = 7;
+//     } else {
+//         console.log("diff", difficulty.value);
+//         gridSize = 0;
+//         gridRow = 0;
+
+//         return;
+//     }
+
+//     // Creazione delle bombe (array di numeri)
+//     bombs = createBombs(bombsNumber, gridSize);
+//     console.log("Le bombe",bombs);
+    
+    
+//     // Disegno della griglia (posizione nel DOM, quiantità di celle, celle per righa)
+//     gridDraw(grid, gridSize, gridRow);
+//     console.log(playBtn);
+// });
+
+
+// FUNCTIONS
+
+/**
+ * Description La funzione resetta e avvia il gioco e si occupa di azzerare tutti i valori
+ * 
+ * @returns {void}
+ */
+function restartGame() {
     // Stato del gioco (true->Attivo false->Fermo)
     play = true;
 
     // console.log("gridSize", gridSize);
     // Pulizia del main container
-    clearGrid(grid);
+    clearGrid(gridContainer);
+
+    // Azzeramento del contatore di cell
+    cellCounter = [];
+
+    // Rilevamento della difficoltà scelta
+    if (parseInt(difficulty.value) === 1) {
+        console.log("diff", difficulty.value);
+        gridSize = 100;
+        gridRow = 10;
+    } else if (parseInt(difficulty.value) === 2) {
+        console.log("diff", difficulty.value);
+        gridSize = 81;
+        gridRow = 9;
+    } else if (parseInt(difficulty.value) === 3) {
+        console.log("diff", difficulty.value);
+        gridSize = 49;
+        gridRow = 7;
+    } else {
+        console.log("diff", difficulty.value);
+        gridSize = 0;
+        gridRow = 0;
+
+        return;
+    }
 
     // Creazione delle bombe (array di numeri)
     bombs = createBombs(bombsNumber, gridSize);
     console.log("Le bombe",bombs);
     
-    // Scelta della difficoltà
-    // DISATTIVATO PER ORA
-    // if (parseInt(difficulty.value) === 1) {
-    //     console.log("diff", difficulty.value);
-    //     console.log("dfdheuid");
-    //     gridSize = 100;
-    //     gridSide = 10;
-    // } else if (parseInt(difficulty.value) === 2) {
-    //     console.log("diff", difficulty.value);
-    //     console.log("Aaaaa");
-    //     gridSize = 81;
-    //     gridSide = 9;
-    // } else if (parseInt(difficulty.value) === 3) {
-    //     console.log("diff", difficulty.value);
-    //     console.log("GGGGgggGg");
-    //     gridSize = 49;
-    //     gridSide = 7;
-    // } else {
-    //     console.log("diff", difficulty.value);
-    //     gridSize = 0;
-    //     gridSide = 0;
-    // }
-    
     
     // Disegno della griglia (posizione nel DOM, quiantità di celle, celle per righa)
-    gridDraw(grid, gridSize, gridSide);
+    grid = gridDraw(gridContainer, gridSize, gridRow);
     console.log(playBtn);
-});
-
-
-// FUNCTIONS
+}
 
 /**
  * Description Crea una grignia di n° celle numerate e interattive
@@ -124,10 +169,10 @@ function gridDraw (gridToDraw, cellQuantity, rowSize) {
     for (let i = 1; i <= cellQuantity; i++) {
         
         // Creazione singola cella
-        const cell = cellCreation(i);
+        const thisCell = cellCreation(i);
         
         // Cella aggiunta alla griglia
-        gridToDraw.append(cell);
+        gridToDraw.append(thisCell);
     }
 
     // Viene ritornata la griglia completata
@@ -173,6 +218,12 @@ function cellIsTouched() {
 
             // Colora la cella di rosso
             this.classList.add("bg_cell-explode");
+
+            // for (let i = 0; i <= grid.length; i++) {
+            //     const thisCell = allBoom[i];
+            //     if (bomb.includes(parseInt(thisCell.innerHTML)))
+            //         thisCell.classList.add("bg_cell-explode");
+            // }
             
             // Messaggio "hai perso"
             communicationBox.classList.remove("ms_hidden");
