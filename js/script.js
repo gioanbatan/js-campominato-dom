@@ -70,44 +70,6 @@ const youLooseMessage = document.querySelector(".ms_loose");
 // INPUT
 // SE l'utente clicca play resetta e avvia il gioco 
 playBtn.addEventListener("click", restartGame);
-//     // Stato del gioco (true->Attivo false->Fermo)
-//     play = true;
-
-//     // console.log("gridSize", gridSize);
-//     // Pulizia del main container
-//     clearGrid(grid);
-
-//     // Scelta della difficoltà
-//     if (parseInt(difficulty.value) === 1) {
-//         console.log("diff", difficulty.value);
-//         gridSize = 100;
-//         gridRow = 10;
-//     } else if (parseInt(difficulty.value) === 2) {
-//         console.log("diff", difficulty.value);
-//         gridSize = 81;
-//         gridRow = 9;
-//     } else if (parseInt(difficulty.value) === 3) {
-//         console.log("diff", difficulty.value);
-//         gridSize = 49;
-//         gridRow = 7;
-//     } else {
-//         console.log("diff", difficulty.value);
-//         gridSize = 0;
-//         gridRow = 0;
-
-//         return;
-//     }
-
-//     // Creazione delle bombe (array di numeri)
-//     bombs = createBombs(bombsNumber, gridSize);
-//     console.log("Le bombe",bombs);
-    
-    
-//     // Disegno della griglia (posizione nel DOM, quiantità di celle, celle per righa)
-//     gridDraw(grid, gridSize, gridRow);
-//     console.log(playBtn);
-// });
-
 
 // FUNCTIONS
 
