@@ -45,7 +45,7 @@ let gridRow = 0;
 let bombsNumber = 16;
 // Array delle bombe
 let bombs = [];
-// Array celle inermi toccate
+// Array celle sicure toccate
 let cellCounter = [];
 // Interruttore gioco attivo
 let play = false;
@@ -55,6 +55,7 @@ let play = false;
 const playBtn = document.getElementById("play-btn");
 // Selettore della difficoltà
 const difficulty = document.getElementById("difficulty");
+
 
 // OUTPUT ELEMENTS
 // Contenitore della griglia
@@ -116,7 +117,7 @@ function restartGame() {
     
     
     // Disegno della griglia (posizione nel DOM, quiantità di celle, celle per righa)
-    const grid = gridDraw(gridContainer, gridSize, gridRow);
+    gridDraw(gridContainer, gridSize, gridRow);
     console.log(playBtn);
 }
 
@@ -178,15 +179,9 @@ function cellIsTouched() {
         if (bombs.includes(thisCell)) {
             console.log("KABOOM!", cellCounter.length, "points");
 
-            // Colora la cella di rosso
-            this.classList.add("bg_cell-explode");
+            // Rivela le celle delle bombe
+            revealBomb();
 
-            // for (let i = 0; i <= grid.length; i++) {
-            //     const thisCell = allBoom[i];
-            //     if (bomb.includes(parseInt(thisCell.innerHTML)))
-            //         thisCell.classList.add("bg_cell-explode");
-            // }
-            
             // Messaggio "hai perso"
             communicationBox.classList.remove("ms_hidden");
             youLooseMessage.classList.remove("ms_hidden");
@@ -195,7 +190,7 @@ function cellIsTouched() {
             // Ferma il gioco
             play = false;
         } else if (!cellCounter.includes(thisCell)) {
-            // ALTRIMENTI SE la cella cliccata è inerme e non è già stata selezionata aggiungila all'array cellCounter
+            // ALTRIMENTI SE la cella cliccata è sicura e non è già stata selezionata aggiungila all'array cellCounter
             cellCounter.push(thisCell);
 
             // Colora la cella di azzurro
@@ -203,11 +198,14 @@ function cellIsTouched() {
         }
 
         //Controllo vittoria raggiunta
-        if (cellCounter >= (gridSize - bombsNumber)) {
-            // SE il contatore cellCounter ha raggiunto il massimo delle celle inermi possibili l'utente ha vinto
-            console.log("WIN", cellCounter.length, "points");
+        if (cellCounter.length >= (gridSize - bombsNumber)) {
+            // SE il contatore cellCounter ha raggiunto il massimo delle celle sicure possibili l'utente ha vinto
+            
+            // Rivela le celle delle bombe
+            revealBomb();
             
             // Messaggio "hai vinto"
+            console.log("WIN", cellCounter.length, "points");
             communicationBox.classList.remove("ms_hidden");
             youWinMessage.classList.remove("ms_hidden");
             youWinMessage.innerHTML = `Hai vinto!!! Il tuo punteggio è di ${cellCounter.length} punti!`;
@@ -262,7 +260,7 @@ function getRndInt(min, max) {
  * Description Pulisce il contenuto della griglia e nasconde messagi all'utente
  * @param {oggetto} gridToClear Griglia da pulire
  */
-function clearGrid (gridToClear) {
+function clearGrid(gridToClear) {
 
     // Pulizia del main container
     gridToClear.innerHTML = "";
@@ -271,4 +269,20 @@ function clearGrid (gridToClear) {
     communicationBox.classList.add("ms_hidden");
     youLooseMessage.classList.add("ms_hidden");
     youWinMessage.classList.add("ms_hidden");
+}
+
+/**
+ * Description Funzione che colora di rosso tuttle le celle contenenti bombe
+ * @returns {void}
+ */
+function revealBomb() {
+    // Preleva tutte le celle dal DOM
+    const grid = document.querySelectorAll(".ms_main-container .ms_cell");
+    console.log(grid, grid.length);
+    for (let i = 0; i < grid.length; i++) {
+        // Controlla ad una ad una le celle: se contengono un valore uguale a uno di quelli nell'array bombs colora di rosso la cella
+        const thisGridCell = grid[i];
+        if (bombs.includes(parseInt(thisGridCell.innerHTML)))
+        thisGridCell.classList.add("bg_cell-explode");
+    }
 }
