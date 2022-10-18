@@ -68,17 +68,19 @@ const youWinMessage = document.querySelector(".ms_win");
 const youLooseMessage = document.querySelector(".ms_loose");
 
 // INPUT
-// 1 SE l'utente clicca sul pulsante play
+// SE l'utente clicca play resetta e avvia il gioco 
 playBtn.addEventListener("click", function () {
-    // Stato del gioco true->Attivo false->Fermo
+    // Stato del gioco (true->Attivo false->Fermo)
     play = true;
+
     // console.log("gridSize", gridSize);
-    // ESECUZIONE
-    // 2 Pulizia del main conteiner
+    // Pulizia del main container
     clearGrid(grid);
 
+    // Creazione delle bombe (array di numeri)
     bombs = createBombs(bombsNumber, gridSize);
     console.log("Le bombe",bombs);
+    
     // Scelta della difficoltà
     // DISATTIVATO PER ORA
     // if (parseInt(difficulty.value) === 1) {
@@ -101,8 +103,9 @@ playBtn.addEventListener("click", function () {
     //     gridSize = 0;
     //     gridSide = 0;
     // }
-    // 3 Creazione della griglia, il numero indica la quantità di celle
-    // OUTPUT
+    
+    
+    // Disegno della griglia (posizione nel DOM, quiantità di celle, celle per righa)
     gridDraw(grid, gridSize, gridSide);
     console.log(playBtn);
 });
@@ -117,20 +120,17 @@ playBtn.addEventListener("click", function () {
  */
 function gridDraw (gridToDraw, cellQuantity, rowSize) {
    
-    // 3.1 Si avvia un ciclo che n volte:
+    // Ciclo che crea n° celle
     for (let i = 1; i <= cellQuantity; i++) {
         
-        // 3.2 Si crea la cella
+        // Creazione singola cella
         const cell = cellCreation(i);
         
-        // 3.3 Si aggiunge la cella alla griglia
+        // Cella aggiunta alla griglia
         gridToDraw.append(cell);
-        
-        //  3.4 Fine iterazione
-        // console.log("iteration", i);
     }
 
-    // 3.5 Viene ritornata la griglia completata
+    // Viene ritornata la griglia completata
     return gridToDraw;
 }
 
@@ -140,49 +140,65 @@ function gridDraw (gridToDraw, cellQuantity, rowSize) {
  * @returns {object} cella come elemento del DOM
  */
 function cellCreation(cellNumber) {
-    //  2.3 Crea un elemento HTML con classe .ms_cell che contiene
+    // Crea un elemento HTML con classe .ms_cell
     const newCell = document.createElement("div");
     newCell.classList.add("ms_cell");
-    //  2.4 Un Numero che corrisponde all'indice del ciclo
+
+    // Viene inserito il numero cella che corrisponde all'indice del ciclo
     newCell.innerHTML = cellNumber;
-    //  2.5 Un event listner per la colorazione in azzurro
+
+    // Viene aggiunto un event listner per l'interazione
     newCell.addEventListener("click", cellIsTouched);
 
+    // Viene ritornata la cella
     return newCell;
 }
 
 /**
- * Description funzione che si occupa di colorare in azzurro le celle cliccate
+ * Description funzione che si occupa dell'interazione con la cella
  * @param {object} cellTouched cella cliccata
  * @returns {object} cella cliccata con classe bg_cell-touched
  */
 function cellIsTouched() {
+    // SE il gioco è in corso
     if (play === true) {
+        
+        // Preleva il contenuto dell'elemanto cliccato
         thisCell = parseInt(this.innerHTML);
         console.log("cell touched", thisCell);
+
+        // SE la cella corrisponde a una di quelle delle bombe
         if (bombs.includes(thisCell)) {
             console.log("KABOOM!", cellCounter.length, "points");
-            // alert(`KABOOM! ${cellCounter.length} points`);
+
+            // Colora la cella di rosso
             this.classList.add("bg_cell-explode");
+            
             // Messaggio "hai perso"
             communicationBox.classList.remove("ms_hidden");
             youLooseMessage.classList.remove("ms_hidden");
             youLooseMessage.innerHTML = `Hai perso!!! Il tuo punteggio è di ${cellCounter.length} punti!`;
+           
             // Ferma il gioco
             play = false;
         } else if (!cellCounter.includes(thisCell)) {
+            // ALTRIMENTI SE la cella cliccata è inerme e non è già stata selezionata aggiungila all'array cellCounter
             cellCounter.push(thisCell);
+
+            // Colora la cella di azzurro
             this.classList.add("bg_cell-touched");
         }
 
         //Controllo vittoria raggiunta
         if (cellCounter >= (gridSize - bombsNumber)) {
-            // alert(`WIN! ${cellCounter.length} points`);
+            // SE il contatore cellCounter ha raggiunto il massimo delle celle inermi possibili l'utente ha vinto
             console.log("WIN", cellCounter.length, "points");
-            // MEssaggio "hai vinto"
+            
+            // Messaggio "hai vinto"
             communicationBox.classList.remove("ms_hidden");
             youWinMessage.classList.remove("ms_hidden");
             youWinMessage.innerHTML = `Hai vinto!!! Il tuo punteggio è di ${cellCounter.length} punti!`;
+            
             //Ferma il gioco
             play = false;
         }
@@ -196,15 +212,23 @@ function cellIsTouched() {
  * @returns {array} array con i numeri di cella delle bombe 
  */
 function createBombs(bombsQuantity, cellsNumber) {
+    
+    // Creazione dell'array
     let finalArray = [];
+
+    // Finché l'array non si riempie ripeti il ciclo
     while (finalArray.length < bombsQuantity) {
+        
+        // Creazione di un numero casuale
         const currentNumb = getRndInt(1, cellsNumber);
 
+        // SE il numero non è già contenuto nell'array, aggiungilo
         if (!finalArray.includes(currentNumb)) {
-            //SE il numero non è già contenuto nell'array, aggiungilo
             finalArray.push(currentNumb);
         }
     }
+
+    // Ritorna l'array completo
     return finalArray;
 }
 
@@ -222,15 +246,16 @@ function getRndInt(min, max) {
   }
   
 /**
- * Description Pulisce il contenuto di una griglia
+ * Description Pulisce il contenuto della griglia e nasconde messagi all'utente
  * @param {oggetto} gridToClear Griglia da pulire
  */
 function clearGrid (gridToClear) {
+
     // Pulizia del main container
     gridToClear.innerHTML = "";
+
     // Comunication box nascosto
     communicationBox.classList.add("ms_hidden");
     youLooseMessage.classList.add("ms_hidden");
     youWinMessage.classList.add("ms_hidden");
-    }
-    
+}
