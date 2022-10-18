@@ -47,7 +47,8 @@ let bombsNumber = 16;
 let bombs = [];
 // Array celle inermi toccate
 let cellCounter = [];
-// Interruttore 
+// Interruttore gioco attivo
+let play = false;
 
 // INPUT ELEMENTS
 // Bottone avvio gioco
@@ -58,10 +59,18 @@ const difficulty = document.getElementById("difficulty");
 // OUTPUT ELEMENTS
 // Contenitore della griglia
 const grid = document.querySelector(".ms_main-container");
+// Box comunicazione (fondo scuro per comunicazioni)
+const communicationBox = document.querySelector(".communication-box");
+// Messaggio vittoria
+const youWinMessage = document.querySelector(".ms_win");
+// Messaggio perdita
+const youLooseMessage = document.querySelector(".ms_loose");
 
 // INPUT
 // 1 SE l'utente clicca sul pulsante play
 playBtn.addEventListener("click", function () {
+    // Stato del gioco true->Attivo false->Fermo
+    play = true;
     // console.log("gridSize", gridSize);
     // ESECUZIONE
     // 2 Pulizia del main conteiner
@@ -91,7 +100,6 @@ playBtn.addEventListener("click", function () {
     //     gridSize = 0;
     //     gridSide = 0;
     // }
-
     // 3 Creazione della griglia, il numero indica la quantità di celle
     // OUTPUT
     gridDraw(grid, gridSize, gridSide);
@@ -148,21 +156,25 @@ function cellCreation(cellNumber) {
  * @returns {object} cella cliccata con classe bg_cell-touched
  */
 function cellIsTouched() {
-    thisCell = parseInt(this.innerHTML);
-    console.log("cell touched", thisCell);
-    if (bombs.includes(thisCell)) {
-        console.log("KABOOM!", cellCounter.length, "points");
-        alert(`KABOOM! ${cellCounter.length} points`);
-        this.classList.add("bg_cell-explode")
-    } else if (!cellCounter.includes(thisCell)) {
-        cellCounter.push(thisCell);
-        this.classList.add("bg_cell-touched");
-    }
+    if (play === true) {
+        thisCell = parseInt(this.innerHTML);
+        console.log("cell touched", thisCell);
+        if (bombs.includes(thisCell)) {
+            console.log("KABOOM!", cellCounter.length, "points");
+            alert(`KABOOM! ${cellCounter.length} points`);
+            this.classList.add("bg_cell-explode")
+            play = false;
+        } else if (!cellCounter.includes(thisCell)) {
+            cellCounter.push(thisCell);
+            this.classList.add("bg_cell-touched");
+        }
 
-    //Controllo vittoria raggiunta
-    if (cellCounter >= (gridSize - bombsNumber)) {
-        alert(`WIN! ${cellCounter.length} points`);
-        console.log("WIN", cellCounter.length, "points");
+        //Controllo vittoria raggiunta
+        if (cellCounter >= (gridSize - bombsNumber)) {
+            alert(`WIN! ${cellCounter.length} points`);
+            console.log("WIN", cellCounter.length, "points");
+            play = false;
+        }
     }
 }
 

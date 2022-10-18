@@ -11,7 +11,7 @@ html {
     color: #000000;
     
     background-color: #7fffd4;
-
+    
     width: 100%;
     height: 100vh;
 }
@@ -115,6 +115,20 @@ main {
     background-color: var(--ms_cell-explode);
 }
 
+.ms_comunication-box {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    width: 100%;
+    height: 100%;
+
+    color: #ffffff;
+
+    background: radial-gradient(#000000aa, #00000044);
+}
+
 /* FOOTER */
 footer {
     position: absolute;
@@ -125,4 +139,9 @@ footer {
     height: var(--footer-height);
     padding: 1rem;
     background-color: #ffffff;
+}
+
+/* UTILITIES */
+.ms_hidden {
+    display: none;
 }
