@@ -60,7 +60,8 @@ const difficulty = document.getElementById("difficulty");
 // Contenitore della griglia
 const grid = document.querySelector(".ms_main-container");
 // Box comunicazione (fondo scuro per comunicazioni)
-const communicationBox = document.querySelector(".communication-box");
+const communicationBox = document.querySelector(".ms_communication-box");
+console.log("comm-box", communicationBox)
 // Messaggio vittoria
 const youWinMessage = document.querySelector(".ms_win");
 // Messaggio perdita
@@ -161,8 +162,13 @@ function cellIsTouched() {
         console.log("cell touched", thisCell);
         if (bombs.includes(thisCell)) {
             console.log("KABOOM!", cellCounter.length, "points");
-            alert(`KABOOM! ${cellCounter.length} points`);
-            this.classList.add("bg_cell-explode")
+            // alert(`KABOOM! ${cellCounter.length} points`);
+            this.classList.add("bg_cell-explode");
+            // Messaggio "hai perso"
+            communicationBox.classList.remove("ms_hidden");
+            youLooseMessage.classList.remove("ms_hidden");
+            youLooseMessage.innerHTML = `Hai perso!!! Il tuo punteggio è di ${cellCounter.length} punti!`;
+            // Ferma il gioco
             play = false;
         } else if (!cellCounter.includes(thisCell)) {
             cellCounter.push(thisCell);
@@ -171,8 +177,13 @@ function cellIsTouched() {
 
         //Controllo vittoria raggiunta
         if (cellCounter >= (gridSize - bombsNumber)) {
-            alert(`WIN! ${cellCounter.length} points`);
+            // alert(`WIN! ${cellCounter.length} points`);
             console.log("WIN", cellCounter.length, "points");
+            // MEssaggio "hai vinto"
+            communicationBox.classList.remove("ms_hidden");
+            youWinMessage.classList.remove("ms_hidden");
+            youWinMessage.innerHTML = `Hai vinto!!! Il tuo punteggio è di ${cellCounter.length} punti!`;
+            //Ferma il gioco
             play = false;
         }
     }
@@ -215,7 +226,11 @@ function getRndInt(min, max) {
  * @param {oggetto} gridToClear Griglia da pulire
  */
 function clearGrid (gridToClear) {
-    // 2.1 Pulizia del main conteiner
+    // Pulizia del main container
     gridToClear.innerHTML = "";
+    // Comunication box nascosto
+    communicationBox.classList.add("ms_hidden");
+    youLooseMessage.classList.add("ms_hidden");
+    youWinMessage.classList.add("ms_hidden");
     }
     
