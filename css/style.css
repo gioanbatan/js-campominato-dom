@@ -25,6 +25,7 @@ html {
     /* Colors */
     --ms_cell-default: #ffffff;
     --ms_cell-touched: #7799ff;
+    --ms_cell-explode: #ff0000;
 }
 
 /* UTILITIES */
@@ -108,6 +109,10 @@ main {
 
 .bg_cell-touched {
     background-color: var(--ms_cell-touched);
+}
+
+.bg_cell-explode {
+    background-color: var(--ms_cell-explode);
 }
 
 /* FOOTER */

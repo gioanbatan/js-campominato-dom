@@ -43,7 +43,7 @@ const difficulty = document.getElementById("difficulty");
 let gridSize = 100;
 let gridSide = 10;
 let bombsNumber = 16;
-
+let bombs = [];
 // OUTPUT ELEMENTS
 const grid = document.querySelector(".ms_main-container");
 
@@ -56,10 +56,8 @@ playBtn.addEventListener("click", function () {
     // 2 Pulizia del main conteiner
     clearGrid(grid);
 
-    createBombs(bombsNumber, gridSize);
-
-
-
+    bombs = createBombs(bombsNumber, gridSize);
+    console.log("Le bombe",bombs);
     // Scelta della difficoltà
     // DISATTIVATO PER ORA
     // if (parseInt(difficulty.value) === 1) {
@@ -117,15 +115,6 @@ function gridDraw (gridToDraw, cellQuantity, rowSize) {
 }
 
 /**
- * Description Pulisce il contenuto di una griglia
- * @param {oggetto} gridToClear Griglia da pulire
-  */
-function clearGrid (gridToClear) {
-// 2.1 Pulizia del main conteiner
-gridToClear.innerHTML = "";
-}
-
-/**
  * Description Funzione che crea una nuova cella completa e numerata
  * @param {number} numero della cella
  * @returns {object} cella come elemento del DOM
@@ -147,11 +136,23 @@ function cellCreation(cellNumber) {
  * @param {object} cellTouched cella cliccata
  * @returns {object} cella cliccata con classe bg_cell-touched
  */
-function cellIsTouched(cellTouched) {
-    console.log(this.innerHTML);
-    return this.classList.toggle("bg_cell-touched");    
+function cellIsTouched() {
+    thisCell = parseInt(this.innerHTML);
+    console.log("CELLA TOCCATA", thisCell);
+    if (bombs.includes(thisCell)) {
+        console.log("KABOOM!");
+        this.classList.add("bg_cell-explode")
+    } else {
+        this.classList.toggle("bg_cell-touched");
+    }
 }
 
+/**
+ * Description funzione che crea un array di numeri tra 1 e il limite delle celle di una quantatità di indici specifica
+ * @param {number} bombsQuantity lunghezza dell'array
+ * @param {number} cellsNumber valore massimo del singolo numero
+ * @returns {array} array con i numeri di cella delle bombe 
+ */
 function createBombs(bombsQuantity, cellsNumber) {
     let finalArray = [];
     while (finalArray.length < bombsQuantity) {
@@ -162,9 +163,8 @@ function createBombs(bombsQuantity, cellsNumber) {
             finalArray.push(currentNumb);
         }
     }
-    console.log("le bombe",finalArray);
+    return finalArray;
 }
-
 
 /**
  * Description funzione per ottenere un numero intero random tra min e max compresi 
@@ -179,3 +179,12 @@ function getRndInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min); 
   }
   
+  /**
+ * Description Pulisce il contenuto di una griglia
+ * @param {oggetto} gridToClear Griglia da pulire
+  */
+function clearGrid (gridToClear) {
+    // 2.1 Pulizia del main conteiner
+    gridToClear.innerHTML = "";
+    }
+    
