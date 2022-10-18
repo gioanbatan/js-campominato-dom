@@ -35,18 +35,29 @@
 //          ALTRIMENTI SE l'array "celle già selezionate" raggiunge la lunghezza di "celle totali - n° bombe" si passa alla fase "fine gioco - vittoria!"
 //              -->"fine gioco - vittoria!" mostrare un messaggio di congratulazioni
 //          ALTRIMENTI si colora la cella scelta di blu e si aggiunge la cella all'array "celle già selezionate" e il gioco prosegue
-// 
+
+// DATA 
+// Dimensione griglia
+let gridSize = 100;
+// Numero di celle per lato della griglia
+let gridSide = 10;
+// Numero bombe
+let bombsNumber = 16;
+// Array delle bombe
+let bombs = [];
+// Array celle inermi toccate
+let cellCounter = [];
+// Interruttore 
 
 // INPUT ELEMENTS
+// Bottone avvio gioco
 const playBtn = document.getElementById("play-btn");
+// Selettore della difficoltà
 const difficulty = document.getElementById("difficulty");
-let gridSize = 100;
-let gridSide = 10;
-let bombsNumber = 16;
-let bombs = [];
-// OUTPUT ELEMENTS
-const grid = document.querySelector(".ms_main-container");
 
+// OUTPUT ELEMENTS
+// Contenitore della griglia
+const grid = document.querySelector(".ms_main-container");
 
 // INPUT
 // 1 SE l'utente clicca sul pulsante play
@@ -138,12 +149,20 @@ function cellCreation(cellNumber) {
  */
 function cellIsTouched() {
     thisCell = parseInt(this.innerHTML);
-    console.log("CELLA TOCCATA", thisCell);
+    console.log("cell touched", thisCell);
     if (bombs.includes(thisCell)) {
-        console.log("KABOOM!");
+        console.log("KABOOM!", cellCounter.length, "points");
+        alert(`KABOOM! ${cellCounter.length} points`);
         this.classList.add("bg_cell-explode")
-    } else {
-        this.classList.toggle("bg_cell-touched");
+    } else if (!cellCounter.includes(thisCell)) {
+        cellCounter.push(thisCell);
+        this.classList.add("bg_cell-touched");
+    }
+
+    //Controllo vittoria raggiunta
+    if (cellCounter >= (gridSize - bombsNumber)) {
+        alert(`WIN! ${cellCounter.length} points`);
+        console.log("WIN", cellCounter.length, "points");
     }
 }
 
@@ -179,10 +198,10 @@ function getRndInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min); 
   }
   
-  /**
+/**
  * Description Pulisce il contenuto di una griglia
  * @param {oggetto} gridToClear Griglia da pulire
-  */
+ */
 function clearGrid (gridToClear) {
     // 2.1 Pulizia del main conteiner
     gridToClear.innerHTML = "";
