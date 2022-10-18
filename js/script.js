@@ -116,7 +116,7 @@ function restartGame() {
     
     
     // Disegno della griglia (posizione nel DOM, quiantità di celle, celle per righa)
-    grid = gridDraw(gridContainer, gridSize, gridRow);
+    const grid = gridDraw(gridContainer, gridSize, gridRow);
     console.log(playBtn);
 }
 
