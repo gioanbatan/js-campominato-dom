@@ -98,8 +98,8 @@ main {
     justify-content: center;
     align-items: center;
     
-    width: calc(100% / 10);
-    height: calc(100% / 10);
+    /* width: calc(100% / 10); */
+    /* height: calc(100% / 10); */
     
     background-color: var(--ms_cell-default);
     border: 1px solid #000000;

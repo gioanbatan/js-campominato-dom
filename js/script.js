@@ -63,10 +63,8 @@ const gridContainer = document.querySelector(".ms_main-container");
 // Box comunicazione (fondo scuro per comunicazioni)
 const communicationBox = document.querySelector(".ms_communication-box");
 console.log("comm-box", communicationBox)
-// Messaggio vittoria
-const youWinMessage = document.querySelector(".ms_win");
-// Messaggio perdita
-const youLooseMessage = document.querySelector(".ms_loose");
+// Messaggio
+const yourMessage = document.querySelector(".ms_message");
 
 // INPUT
 // SE l'utente clicca play resetta e avvia il gioco 
@@ -114,8 +112,7 @@ function restartGame() {
     // Creazione delle bombe (array di numeri)
     bombs = createBombs(bombsNumber, gridSize);
     console.log("Le bombe",bombs);
-    
-    
+
     // Disegno della griglia (posizione nel DOM, quiantità di celle, celle per righa)
     gridDraw(gridContainer, gridSize, gridRow);
     console.log(playBtn);
@@ -152,6 +149,10 @@ function cellCreation(cellNumber) {
     const newCell = document.createElement("div");
     newCell.classList.add("ms_cell");
 
+    // Style inline per adattare la griglia
+    newCell.style.width = `calc(100% / ${gridRow})`
+    newCell.style.height = `calc(100% / ${gridRow})`
+
     // Viene inserito il numero cella che corrisponde all'indice del ciclo
     newCell.innerHTML = cellNumber;
 
@@ -184,8 +185,8 @@ function cellIsTouched() {
 
             // Messaggio "hai perso"
             communicationBox.classList.remove("ms_hidden");
-            youLooseMessage.classList.remove("ms_hidden");
-            youLooseMessage.innerHTML = `Hai perso!!! Il tuo punteggio è di ${cellCounter.length} punti!`;
+            yourMessage.classList.remove("ms_hidden");
+            yourMessage.innerHTML = `Hai perso!!! Il tuo punteggio è di ${cellCounter.length} punti!`;
            
             // Ferma il gioco
             play = false;
@@ -207,8 +208,8 @@ function cellIsTouched() {
             // Messaggio "hai vinto"
             console.log("WIN", cellCounter.length, "points");
             communicationBox.classList.remove("ms_hidden");
-            youWinMessage.classList.remove("ms_hidden");
-            youWinMessage.innerHTML = `Hai vinto!!! Il tuo punteggio è di ${cellCounter.length} punti!`;
+            yourMessage.classList.remove("ms_hidden");
+            yourMessage.innerHTML = `Hai vinto!!! Il tuo punteggio è di ${cellCounter.length} punti!`;
             
             //Ferma il gioco
             play = false;
@@ -267,8 +268,7 @@ function clearGrid(gridToClear) {
 
     // Comunication box nascosto
     communicationBox.classList.add("ms_hidden");
-    youLooseMessage.classList.add("ms_hidden");
-    youWinMessage.classList.add("ms_hidden");
+    yourMessage.classList.add("ms_hidden");
 }
 
 /**
